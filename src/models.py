@@ -20,16 +20,16 @@ class Usuario(Base):
     email = Column(String(250), nullable=False)
     password = Column(Integer, nullable=False)
     subscription_date = Column(Integer, nullable=False)
+    favorite = relationship('Favoritos', backref='usuario')
 
 class Favoritos(Base):
     __tablename__ = 'favoritos'
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('usuario.id'))
-    user = relationship(Usuario)
     planetas_favoritos = Column(String(250), nullable=False)
     personajes_favoritos = Column(String(250), nullable=False)
-
-
+    planets = relationship('Planetas', backref='favoritos')
+    perosnajes_fav = relationship('Personajes', backref='favoritos')
 
 class Planetas(Base):
     __tablename__ = 'planetas'
@@ -41,9 +41,7 @@ class Planetas(Base):
     population = Column(String(250), nullable=False)
     climate  = Column(String(250), nullable=False)
     fav_id = Column(Integer, ForeignKey('favoritos.planetas_favoritos'))
-    favoritos = relationship(Favoritos)
- 
-
+    
     
 class Personajes(Base):
     __tablename__ = 'personajes'
@@ -54,14 +52,8 @@ class Personajes(Base):
     gender = Column(String(250),  nullable=False)
     eyes_color = Column(String(250), nullable=False)
     fav_id = Column(Integer, ForeignKey('favoritos.personajes_favoritos'))
-    favoritos = relationship (Favoritos)
-
-
     
-   
-   
 
-  
 
 
 def to_dict(self):
